@@ -1,0 +1,107 @@
+:root {
+  --game-board-background-color: #333333;
+  --game-cell-background-color: white;
+  --game-player-icon-color: #0064d9;
+}
+
+.currentPlayerBox.sapMHBox {
+  padding: 1rem;
+}
+
+.statusBox .sapMLabel {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.playerText.sapMText {
+  font-size: 6rem;
+  font-weight: bold;
+  color: var(--game-player-icon-color);
+  margin-bottom: 10px;
+}
+
+.gameBoard.sapMVBox {
+  margin: 2rem;
+  padding: 10px;
+  background-color: var(--game-board-background-color);
+  border-radius: 4px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.boardRow.sapMHBox {
+  margin: 5px;
+}
+
+.boardCell.sapMBtn {
+  height: 160px !important;
+  width: 160px !important;
+  margin: 5px;
+  background-color: var(--game-cell-background-color);
+}
+
+.boardCell.sapMBtn:hover {
+  background-color: var(--game-cell-background-color);
+}
+
+.boardCell.sapMBtnPressed {
+  background-color: var(--game-cell-background-color);
+}
+
+.boardCell.sapMBtn:hover > .sapMBtnHoverable {
+  background-color: transparent;
+  border: none;
+}
+
+.boardCell .sapMBtnInner {
+  font-size: 6rem !important;
+  font-weight: bold !important;
+  height: 100%;
+  display: block;
+  margin: auto;
+  align-content: center;
+}
+
+.boardCell.sapMBtn .sapMBtnContent {
+  display: block !important;
+  height: 100%;
+  line-height: 9rem !important;
+}
+
+.winnerText.sapMText {
+  font-size: 4rem;
+  font-weight: bold;
+}
+
+.matchScoreBox.sapMHBox {
+  margin: 1rem 0;
+  padding: 1rem;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+.scoreSection.sapMVBox {
+  padding: 0 1rem;
+}
+
+.scoreSection.sapMVBox .sapMLabel {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.scoreText.sapMText {
+  font-size: 3rem;
+  font-weight: bold;
+  color: var(--game-player-icon-color);
+}
+
+.vsSection.sapMVBox .sapMText:first-child {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #666;
+  margin-bottom: 0.3rem;
+}
+
+.matchInfoText.sapMText {
+  font-size: 0.9rem;
+  color: #333;
+}

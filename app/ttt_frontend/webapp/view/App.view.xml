@@ -1,0 +1,25 @@
+<mvc:View controllerName="tictactoe.tttfrontend.controller.App"
+    xmlns:mvc="sap.ui.core.mvc"
+	xmlns:f="sap.f"
+	xmlns:tnt="sap.tnt"
+    xmlns="sap.m">
+    <tnt:ToolPage id="app">
+        <tnt:header>
+            <tnt:ToolHeader>
+                <Title text="{i18n>appTitle}" />
+            </tnt:ToolHeader>
+        </tnt:header>
+        <tnt:sideContent>
+            <tnt:SideNavigation id="sideNavigation" expanded="false">
+                <tnt:NavigationList>
+                    <tnt:NavigationListItem text="{i18n>homeBtn}" icon="sap-icon://home" select="onHomePress"  />
+                    <tnt:NavigationListItem text="{i18n>newGameBtn}" icon="sap-icon://play" select="onNewGamePress"/>
+                    <tnt:NavigationListItem text="{i18n>gameSessionLogsBtn}" icon="sap-icon://list" select="onGameSessionLogsPress"/>
+                </tnt:NavigationList>
+            </tnt:SideNavigation>
+        </tnt:sideContent>
+        <tnt:mainContents>
+            <NavContainer id="pages-container"/>
+        </tnt:mainContents>
+    </tnt:ToolPage>
+</mvc:View>

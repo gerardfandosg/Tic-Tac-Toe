@@ -1,0 +1,145 @@
+{
+  "_version": "1.82.0",
+  "sap.app": {
+    "id": "tictactoe.tttfrontend",
+    "type": "application",
+    "i18n": "i18n/i18n.properties",
+    "applicationVersion": {
+      "version": "0.0.1"
+    },
+    "title": "{{appTitle}}",
+    "description": "{{appDescription}}",
+    "resources": "resources.json",
+    "sourceTemplate": {
+      "id": "@sap/generator-fiori:basic",
+      "version": "1.20.4",
+      "toolsId": "74289e2e-5681-40af-a7b8-0d70b55d944c"
+    },
+    "dataSources": {
+      "mainService": {
+        "uri": "/odata/v4/match/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "odataVersion": "4.01"
+        }
+      }
+    }
+  },
+  "sap.ui": {
+    "technology": "UI5",
+    "icons": {
+      "icon": "",
+      "favIcon": "",
+      "phone": "",
+      "phone@2": "",
+      "tablet": "",
+      "tablet@2": ""
+    },
+    "deviceTypes": {
+      "desktop": true,
+      "tablet": true,
+      "phone": true
+    }
+  },
+  "sap.ui5": {
+    "flexEnabled": false,
+    "dependencies": {
+      "minUI5Version": "1.145.0",
+      "libs": {
+        "sap.m": {},
+        "sap.ui.core": {}
+      }
+    },
+    "contentDensities": {
+      "compact": true,
+      "cozy": true
+    },
+    "models": {
+      "": {
+        "type": "sap.ui.model.json.JSONModel"
+      },
+      "i18n": {
+        "type": "sap.ui.model.resource.ResourceModel",
+        "settings": {
+          "bundleName": "tictactoe.tttfrontend.i18n.i18n"
+        }
+      },
+      "mainService": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true
+        }
+      }
+    },
+    "resources": {
+      "css": [
+        {
+          "uri": "css/style.css"
+        }
+      ]
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "controlAggregation": "pages",
+        "controlId": "pages-container",
+        "transition": "slide",
+        "type": "View",
+        "viewType": "XML",
+        "path": "tictactoe.tttfrontend.view",
+        "async": true,
+        "viewPath": "tictactoe.tttfrontend.view"
+      },
+      "routes": [
+        {
+          "name": "RouteHome",
+          "pattern": "",
+          "target": [
+            "TargetHome"
+          ]
+        },
+        {
+          "name": "RouteGameSession",
+          "pattern": "GameSession",
+          "target": [
+            "TargetGameSession"
+          ]
+        },
+        {
+          "name": "RouteLogs",
+          "pattern": "Logs",
+          "target": [
+            "TargetLogs"
+          ]
+        }
+      ],
+      "targets": {
+        "TargetHome": {
+          "id": "home",
+          "name": "Home",
+          "ViewLevel": 1
+        },
+        "TargetGameSession": {
+          "id": "gameSession",
+          "name": "GameSession",
+          "ViewLevel": 2
+        },
+        "TargetLogs": {
+          "id": "logs",
+          "name": "Logs",
+          "ViewLevel": 2
+        }
+      }
+    },
+    "rootView": {
+      "viewName": "tictactoe.tttfrontend.view.App",
+      "type": "XML",
+      "id": "App",
+      "async": true
+    }
+  }
+}

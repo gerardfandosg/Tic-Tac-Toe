@@ -1,0 +1,16 @@
+{
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "sqlite",
+        "impl": "@cap-js/sqlite",
+        "credentials": {
+          "url": "db.sqlite"
+        }
+      }
+    },
+    "features": {
+      "in_memory_db": true
+    }
+  }
+}

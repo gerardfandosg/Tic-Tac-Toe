@@ -1,0 +1,39 @@
+{
+  "name": "tic-tac-toe",
+  "version": "1.0.0",
+  "dependencies": {
+    "@cap-js/sqlite": "^2.1.3",
+    "@sap/cds": "^9.7.1",
+    "express": "^4",
+    "sqlite3": "^5.1.7"
+  },
+  "devDependencies": {
+    "@sap/cds-dk": "^9",
+    "@sap/eslint-plugin-cds": "^3",
+    "cds-plugin-ui5": "^0.13.0",
+    "rimraf": "^5.0.5",
+    "mbt": "^1.2.29"
+  },
+  "scripts": {
+    "start": "cds-serve",
+    "watch-ttt_frontend": "cds watch --open tictactoe.tttfrontend/index.html?sap-ui-xx-viewCache=false --livereload false",
+    "undeploy": "cf undeploy ttt_backend --delete-services --delete-service-keys --delete-service-brokers",
+    "build": "rimraf resources mta_archives && mbt build --mtar archive",
+    "deploy": "cf deploy mta_archives/archive.mtar --retries 1"
+  },
+  "private": true,
+  "cds": {
+    "requires": {
+      "db": {
+        "kind": "sqlite",
+        "model": "*",
+        "credentials": {
+          "url": "db/tictactoe.sqlite"
+        }
+      }
+    }
+  },
+  "workspaces": [
+    "app/*"
+  ]
+}

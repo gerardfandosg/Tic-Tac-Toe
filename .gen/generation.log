@@ -1,0 +1,30 @@
+Starting CAP Project Generator...
+Using @sap/cds-dk [9.7.2] from C:\Users\gerar\AppData\Roaming\npm\node_modules\@sap\cds-dk
+Using @sap/generator-cap-project [2.0.5] from [C:\Users\gerar\AppData\Roaming\npm\node_modules\@sap\generator-cap-project]
+Using root path [e:\Repositories\tic-tac-toe]
+
+Creating project with approuter, mta, nodejs, postgres
+
+Adding facet: nodejs
+Adding facet: mta
+Adding facet: postgres
+Adding facet: approuter
+
+Successfully initialized CAP project
+Continue with: code ttt_backend 
+
+
+Installing dependencies...
+
+added 280 packages, and audited 281 packages in 9s
+
+38 packages are looking for funding
+  run `npm fund` for details
+
+found 0 vulnerabilities
+
+Finished installing dependencies
+
+Done setting up project ttt_backend
+Project is ready to use
+

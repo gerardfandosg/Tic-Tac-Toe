@@ -1,0 +1,44 @@
+<core:FragmentDefinition
+  xmlns="sap.m"
+	xmlns:f="sap.ui.layout.form"
+  xmlns:core="sap.ui.core">
+  <Dialog showHeader="false">
+    <VBox class="sapUiMediumMargin">
+      <f:SimpleForm
+        editable="true"
+        layout="ResponsiveGridLayout"
+        title="{i18n>gameConfigDialogTitle}"
+        labelSpanXL="12"
+        labelSpanL="12"
+        labelSpanM="12"
+        labelSpanS="12"
+        adjustLabelSpan="false"
+        emptySpanXL="4"
+        emptySpanL="4"
+        emptySpanM="4"
+        emptySpanS="0"
+        columnsXL="1"
+        columnsL="1"
+        columnsM="1"
+        singleContainerFullSize="false" >
+        <Label text="{i18n>gameConfigDialogGameTypeLabel}" />
+        <RadioButtonGroup id="matchTypeGroup" columns="1" selectedIndex="0">
+          <RadioButton text="{i18n>gameConfigDialogType1}" />
+          <RadioButton text="{i18n>gameConfigDialogType2}" />
+          <RadioButton text="{i18n>gameConfigDialogType3}" />
+        </RadioButtonGroup>
+        <Label text="{i18n>gameConfigDialogAILabel}" />
+        <CheckBox id="ai-opponent-chb" selected="false"/>
+      </f:SimpleForm>
+    </VBox>
+    <footer>
+      <OverflowToolbar >
+        <ToolbarSpacer />
+        <Button text="{i18n>startNewGameBtn}" press=".onStartMatch" type="Emphasized"/>
+        <ToolbarSpacer />
+      </OverflowToolbar>
+    </footer>
+    <beginButton>
+    </beginButton>
+  </Dialog>
+</core:FragmentDefinition>

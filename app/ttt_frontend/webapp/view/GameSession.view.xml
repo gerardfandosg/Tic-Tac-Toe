@@ -1,0 +1,78 @@
+<mvc:View controllerName="tictactoe.tttfrontend.controller.GameSession"
+  xmlns:mvc="sap.ui.core.mvc"
+	xmlns:f="sap.f"
+	xmlns:tnt="sap.tnt"
+	xmlns:core="sap.ui.core"
+  xmlns:customData="http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1"
+  xmlns="sap.m">
+  <Page showHeader="false">
+    <VBox alignItems="Center" justifyContent="Center" visible="true">       
+      
+      <HBox class="matchScoreBox" justifyContent="Center" width="100%" visible="{/gameInProgress}">
+        <VBox alignItems="Center" class="scoreSection">
+          <Label text="Player X" class="playerLabel"/>
+          <Text text="{/playerXWins}" class="scoreText"/>
+        </VBox>
+        <VBox alignItems="Center" class="scoreSection vsSection">
+          <Text text="VS" class="vsText"/>
+          <Text text="{/matchInfo}" class="matchInfoText"/>
+        </VBox>
+        <VBox alignItems="Center" class="scoreSection">
+          <Label text="Player O" class="playerLabel"/>
+          <Text text="{/playerOWins}" class="scoreText"/>
+        </VBox>
+      </HBox>
+
+      <HBox class="currentPlayerBox" justifyContent="Center" width="100%" visible="{/matchInProgress}">
+        <VBox alignItems="Center" justifyContent="Center">
+          <Label text="{i18n>currentPlayerLabel}" />
+          <Text text="{/currentPlayer}" class="playerText"/>
+        </VBox>
+      </HBox>
+      
+      <VBox class="gameBoard" visible="{/matchInProgress}">
+        <HBox class="boardRow">
+          <Button class="boardCell" text="{/board/0}" press=".onCellPress" customData:key="0" type="Transparent"/>
+          <Button class="boardCell" text="{/board/1}" press=".onCellPress" customData:key="1" type="Transparent"/>
+          <Button class="boardCell" text="{/board/2}" press=".onCellPress" customData:key="2" type="Transparent"/>
+        </HBox>
+        
+        <HBox class="boardRow">
+          <Button class="boardCell" text="{/board/3}" press=".onCellPress" customData:key="3" type="Transparent"/>
+          <Button class="boardCell" text="{/board/4}" press=".onCellPress" customData:key="4" type="Transparent"/>
+          <Button class="boardCell" text="{/board/5}" press=".onCellPress" customData:key="5" type="Transparent"/>
+        </HBox>
+        
+        <HBox class="boardRow">
+          <Button class="boardCell" text="{/board/6}" press=".onCellPress" customData:key="6" type="Transparent"/>
+          <Button class="boardCell" text="{/board/7}" press=".onCellPress" customData:key="7" type="Transparent"/>
+          <Button class="boardCell" text="{/board/8}" press=".onCellPress" customData:key="8" type="Transparent"/>
+        </HBox>
+      </VBox>
+
+      <HBox justifyContent="Center" width="100%" class="sapUiLargeMarginTop" visible="{= !${/matchInProgress} &amp;&amp; ${/gameInProgress} }">
+        <Text class="winnerText" text="{/winnerText}"/>
+      </HBox>
+
+      <HBox id="new-match-btn-box" justifyContent="Center" width="100%" visible="{= ${/gameInProgress} &amp;&amp; !${/matchInProgress} }" class="sapUiLargeMarginTop">
+        <Button text="{i18n>startNewMatchBtn}" press=".onStartNewMatch" type="Emphasized"/>
+      </HBox>
+    </VBox>
+
+    <Table id="dummy-logs-table" visible="false" items="{mainService>/Match}">
+      <items>
+        <ColumnListItem>
+          <cells>
+            <Text text="{mainService>ID}"/>
+          </cells>
+        </ColumnListItem>
+      </items>
+    </Table>
+
+    <footer>
+      <OverflowToolbar>
+        <Button type="Reject" text="{i18n>restartMatchBtn}" press=".onStartNewGame" visible="{/gameInProgress}"/>
+      </OverflowToolbar>
+    </footer>
+  </Page>
+</mvc:View>

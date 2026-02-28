@@ -1,0 +1,32 @@
+<mvc:View controllerName="tictactoe.tttfrontend.controller.Logs"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m">
+  <Page showHeader="false">
+    <Table items="{mainService>/Match}">
+      <columns>
+        <Column>
+          <Text text="Date" />
+        </Column>
+        <Column>
+          <Text text="Player X wins" />
+        </Column>
+        <Column>
+          <Text text="Player O wins" />
+        </Column>
+        <Column>
+          <Text text="AI Opponent" />
+        </Column>
+      </columns>
+      <items>
+        <ColumnListItem>
+          <cells>
+            <Text text="{mainService>Date}" />
+            <Text text="{mainService>PlayerXWins}" />
+            <Text text="{mainService>PlayerOWins}" />
+            <Text text="{mainService>OpponentWasAI}" />
+          </cells>
+        </ColumnListItem>
+      </items>
+    </Table>
+  </Page>
+</mvc:View>

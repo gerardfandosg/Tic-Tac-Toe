@@ -1,0 +1,6 @@
+<mvc:View controllerName="tictactoe.tttfrontend.controller.Home"
+  xmlns:mvc="sap.ui.core.mvc"
+  xmlns="sap.m">
+  <Page title="homepage">
+  </Page>
+</mvc:View>
