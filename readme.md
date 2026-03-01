@@ -11,12 +11,10 @@ File or Folder | Purpose
 `srv/` | your service models and code go here
 `readme.md` | this getting started guide
 
-## Next Steps
+## Starting steps 
 
-- Open a new terminal and run `cds watch`
-- (in VS Code simply choose _**Terminal** > Run Task > cds watch_)
-- Start with your domain model, in a CDS file in `db/`
-
+- Open a new terminal and run `npm install` to install al required libraries.
+- Then run `npm start` and after it finishes starting visit <http://localhost:3001/tictactoe.tttfrontend/index.html>
 
 ### OpenAI AI Player (optional)
 
