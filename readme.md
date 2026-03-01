@@ -1,6 +1,6 @@
 # Getting Started
 
-Welcome to the TIC TAC TOE SAPUI5 project.
+Welcome to the Tic-tac-toe SAPUI5 project.
 
 It contains these folders and files, following a recommended SAP CAP project layout:
 
