@@ -13,7 +13,8 @@ File or Folder | Purpose
 
 ## Steps to launch the application 
 
-- Open a new terminal and run `npm install` to install al required libraries.
+- Clone repository on your desired directory.
+- Open a new terminal and said directory and run `npm install` to install al required libraries.
 - Then run `npm start` and after it finishes launching visit <http://localhost:3001/tictactoe.tttfrontend/index.html> to start playing.
 
 ### OpenAI AI Player (optional)
