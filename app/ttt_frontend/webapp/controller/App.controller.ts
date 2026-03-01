@@ -1,4 +1,5 @@
 import Router from "sap/m/routing/Router";
+import ToolPage from "sap/tnt/ToolPage";
 import Controller from "sap/ui/core/mvc/Controller";
 import UIComponent from "sap/ui/core/UIComponent";
 import StorageUtil from "sap/ui/util/Storage";
@@ -25,5 +26,10 @@ export default class App extends Controller {
 
     public onGameSessionLogsPress(): void {
         this._router.navTo("RouteLogs");
+    }
+
+    public onSideNavButtonPress(): void {
+        const toolPage = this.byId("app") as ToolPage;
+        toolPage.setSideExpanded(!toolPage.getSideExpanded());
     }
 }

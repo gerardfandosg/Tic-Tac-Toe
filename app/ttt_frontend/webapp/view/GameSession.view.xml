@@ -7,30 +7,15 @@
   xmlns="sap.m">
   <Page id="game-session-page" showHeader="false" binding="{mainService>/MatchService}">
     <VBox alignItems="Center" justifyContent="Center" visible="true">       
-      
-      <HBox class="matchScoreBox" justifyContent="Center" width="100%" visible="{/gameInProgress}">
-        <VBox alignItems="Center" class="scoreSection">
-          <Label text="Player X" class="playerLabel"/>
-          <Text text="{/playerXWins}" class="scoreText"/>
-        </VBox>
-        <VBox alignItems="Center" class="scoreSection vsSection">
-          <Text text="VS" class="vsText"/>
-          <Text text="{/matchInfo}" class="matchInfoText"/>
-        </VBox>
-        <VBox alignItems="Center" class="scoreSection">
-          <Label text="Player O" class="playerLabel"/>
-          <Text text="{/playerOWins}" class="scoreText"/>
-        </VBox>
-      </HBox>
 
-      <HBox class="currentPlayerBox" justifyContent="Center" width="100%" visible="{/matchInProgress}">
+      <!--<HBox class="currentPlayerBox" justifyContent="Center" width="100%" visible="{/matchInProgress}">
         <VBox alignItems="Center" justifyContent="Center">
           <Label text="{i18n>currentPlayerLabel}" />
           <Text text="{/currentPlayer}" class="playerText"/>
         </VBox>
-      </HBox>
+      </HBox>-->
       
-      <VBox id="game-board-box" class="gameBoard" visible="{/matchInProgress}">
+      <VBox id="game-board-box" class="gameBoard" visible="{/gameInProgress}">
         <HBox class="boardRow">
           <Button class="boardCell" text="{/board/0}" press=".onCellPress" customData:key="0" type="Transparent"/>
           <Button class="boardCell" text="{/board/1}" press=".onCellPress" customData:key="1" type="Transparent"/>
@@ -50,7 +35,22 @@
         </HBox>
       </VBox>
 
-      <HBox justifyContent="Center" width="100%" class="sapUiLargeMarginTop" visible="{= !${/matchInProgress} &amp;&amp; ${/gameInProgress} }">
+      <HBox class="matchScoreBox" justifyContent="Center" width="100%" visible="{/gameInProgress}">
+        <VBox alignItems="Center" class="scoreSection">
+          <Label text="Player X" class="playerLabel"/>
+          <Text text="{/playerXWins}" class="scoreText"/>
+        </VBox>
+        <VBox alignItems="Center" class="scoreSection vsSection">
+          <Text text="VS" class="vsText"/>
+          <Text text="{/matchInfo}" class="matchInfoText"/>
+        </VBox>
+        <VBox alignItems="Center" class="scoreSection">
+          <Label text="Player O" class="playerLabel"/>
+          <Text text="{/playerOWins}" class="scoreText"/>
+        </VBox>
+      </HBox>
+
+      <HBox justifyContent="Center" width="100%" class="sapUiSmallMarginTop" visible="{= !${/matchInProgress} &amp;&amp; ${/gameInProgress} }">
         <Text class="winnerText" text="{/winnerText}"/>
       </HBox>
 

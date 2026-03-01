@@ -1,8 +1,8 @@
 # Getting Started
 
-Welcome to your new CAP project.
+Welcome to the TIC TAC TOE SAPUI5 project.
 
-It contains these folders and files, following our recommended project layout:
+It contains these folders and files, following a recommended SAP CAP project layout:
 
 File or Folder | Purpose
 ---------|----------
@@ -11,22 +11,14 @@ File or Folder | Purpose
 `srv/` | your service models and code go here
 `readme.md` | this getting started guide
 
-## Starting steps 
+## Steps to launch the application 
 
 - Open a new terminal and run `npm install` to install al required libraries.
-- Then run `npm start` and after it finishes starting visit <http://localhost:3001/tictactoe.tttfrontend/index.html>
+- Then run `npm start` and after it finishes launching visit <http://localhost:3001/tictactoe.tttfrontend/index.html> to start playing.
 
 ### OpenAI AI Player (optional)
 
-You can enable an AI opponent by setting the environment variable `OPENAI_API_KEY` before starting the service. The backend exposes a custom action `aiMove` on the `MatchService` that queries the OpenAI API for the next move. The frontend automatically calls this action when you select **Play against AI** in the game configuration dialog.
-
-Example (PowerShell):
-
-```powershell
-$env:OPENAI_API_KEY="sk-..."
-cds watch
-```
-
+You can enable an AI opponent by setting the environment variable `OPENAI_API_KEY` before starting the service (see .env.example file. Remove ".example" to have a working .env file). The backend exposes a custom action `aiMove` on the `MatchService` that queries the OpenAI API for deciding the AI move. The frontend automatically calls this action when you select **Play against AI** in the game configuration dialog for all player "O" actions.
 
 ## Learn More
 

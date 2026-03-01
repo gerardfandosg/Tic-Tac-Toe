@@ -26,6 +26,7 @@
 
 .gameBoard.sapMVBox {
   margin: 2rem;
+  margin-top: 6rem;
   padding: 16px;
   background: var(--game-board-background-color);
   border-radius: 16px;
@@ -154,4 +155,50 @@
 .matchInfoText.sapMText {
   font-size: 0.9rem;
   color: var(--home-page-subtitle-color);
+}
+
+@media only screen and (max-width: 600px) {
+  .gameBoard.sapMVBox {
+    margin: 1rem;
+    margin-top: 3rem;
+    padding: 8px;
+  }
+
+  .boardCell.sapMBtn {
+    height: 100px !important;
+    width: 100px !important;
+  }
+
+  .boardCell .sapMBtnInner {
+    font-size: 4rem !important;
+  }
+
+  .boardCell.sapMBtn .sapMBtnContent {
+    line-height: 6rem !important;
+  }
+
+  .playerText.sapMText {
+    font-size: 4rem;
+  }
+
+  .winnerText.sapMText {
+    font-size: 2.5rem;
+  }
+
+  .scoreText.sapMText {
+    font-size: 2rem;
+  }
+
+  .gameTitle.sapMTitle {
+    font-size: 3rem;
+  }
+
+  .gameSubtitle.sapMText {
+    font-size: 1rem;
+  }
+
+  .matchScoreBox.sapMHBox {
+    margin: 0.5rem;
+    padding: 0.5rem;
+  }
 }
