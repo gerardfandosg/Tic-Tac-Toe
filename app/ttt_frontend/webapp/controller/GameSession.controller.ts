@@ -14,6 +14,8 @@ import StorageUtil from "sap/ui/util/Storage";
 import Table from "sap/m/Table";
 import ODataListBinding from "sap/ui/model/odata/v4/ODataListBinding";
 import MessageToast from "sap/m/MessageToast";
+import ODataModel from "sap/ui/model/odata/v4/ODataModel";
+//import Context from "sap/ui/model/odata/v4/Context";
 
 /**
  * @namespace tictactoe.tttfrontend.controller
@@ -22,6 +24,7 @@ export default class GameSession extends Controller {
 
     private _gameConfigDialog: Dialog;
     private _resourceBundle: ResourceBundle;
+    //private _aiApiUrl = "/odata/v4/MatchService/aiMove";
     private _winningCombinations = [
         [0, 1, 2],
         [3, 4, 5],
@@ -169,35 +172,44 @@ export default class GameSession extends Controller {
         this._storeGameStatus();
 
         if (opponentIsAI && currentPlayer === "O") {
-            const aiIndex = await this._requestAiMove(board);
+            const aiIndex = await this._requestAiMove();
             if (aiIndex !== null && aiIndex !== undefined) {
                 await this._applyMove(aiIndex);
             }
         }
     }
 
-    private async _requestAiMove(board: string[]): Promise<number | null> {
+    private async _requestAiMove(): Promise<number | null> {
+        const model = this.getView()?.getModel() as JSONModel;
+        const odataModel = this.getView()?.getModel("mainService") as ODataModel;
+
+        const board = JSON.stringify(model.getProperty("/board") as string[]);
+        const player = model.getProperty("/currentPlayer") as string;
+
         try {
-            const res = await fetch("../api/ai-move", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ board, player: "O" })
-            });
+            // For unbound actions in OData v4, bind with null context
+            const actionBinding = odataModel.bindContext("/MatchService.aiMove(...)", null);
+            actionBinding.setParameter("board", board);
+            actionBinding.setParameter("player", player);
+            
+            await actionBinding.invoke();
 
-            if (!res.ok) {
-                const err = await res.json().catch(() => ({}));
-                MessageToast.show(this._resourceBundle.getText("aiMoveError") ?? "AI move failed");
-                console.error("AI proxy error", err);
-                return null;
+            const result = actionBinding.getBoundContext()?.getObject() as {
+                index: number;
+            };
+            
+            // The result for a scalar return type (Integer) is wrapped in an object with "value" property
+            if (result && typeof result === "object" && "value" in result) {
+                const index = result.value as number;
+                if (typeof index === "number" && index >= 0 && index <= 8) {
+                    return index;
+                }
             }
-
-            const data = await res.json();
-            if (typeof data.index === "number") {
-                return data.index;
-            }
+            
+            MessageToast.show(this._resourceBundle.getText("aiMoveError") ?? "AI move failed");
             return null;
-        } catch (e) {
-            console.error(e);
+        } catch (err) {
+            console.error("AI action error:", err);
             MessageToast.show(this._resourceBundle.getText("aiMoveError") ?? "AI move failed");
             return null;
         }

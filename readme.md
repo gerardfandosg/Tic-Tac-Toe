@@ -17,6 +17,19 @@ File or Folder | Purpose
 - (in VS Code simply choose _**Terminal** > Run Task > cds watch_)
 - Start with your domain model, in a CDS file in `db/`
 
+
+### OpenAI AI Player (optional)
+
+You can enable an AI opponent by setting the environment variable `OPENAI_API_KEY` before starting the service. The backend exposes a custom action `aiMove` on the `MatchService` that queries the OpenAI API for the next move. The frontend automatically calls this action when you select **Play against AI** in the game configuration dialog.
+
+Example (PowerShell):
+
+```powershell
+$env:OPENAI_API_KEY="sk-..."
+cds watch
+```
+
+
 ## Learn More
 
 Learn more at <https://cap.cloud.sap>.
