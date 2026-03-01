@@ -7,14 +7,7 @@
   xmlns="sap.m">
   <Page id="game-session-page" showHeader="false" binding="{mainService>/MatchService}">
     <VBox alignItems="Center" justifyContent="Center" visible="true">       
-
-      <!--<HBox class="currentPlayerBox" justifyContent="Center" width="100%" visible="{/matchInProgress}">
-        <VBox alignItems="Center" justifyContent="Center">
-          <Label text="{i18n>currentPlayerLabel}" />
-          <Text text="{/currentPlayer}" class="playerText"/>
-        </VBox>
-      </HBox>-->
-      
+            
       <VBox id="game-board-box" class="gameBoard" visible="{/gameInProgress}">
         <HBox class="boardRow">
           <Button class="boardCell" text="{/board/0}" press=".onCellPress" customData:key="0" type="Transparent"/>
