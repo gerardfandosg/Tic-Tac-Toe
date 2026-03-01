@@ -22,20 +22,26 @@
         columnsM="1"
         singleContainerFullSize="false" >
         <Label text="{i18n>gameConfigDialogGameTypeLabel}" />
-        <RadioButtonGroup id="matchTypeGroup" columns="1" selectedIndex="0">
+        <RadioButtonGroup id="game-type-group" columns="1" selectedIndex="0">
           <RadioButton text="{i18n>gameConfigDialogType1}" />
           <RadioButton text="{i18n>gameConfigDialogType2}" />
           <RadioButton text="{i18n>gameConfigDialogType3}" />
         </RadioButtonGroup>
         <Label text="{i18n>gameConfigDialogAILabel}" />
-        <CheckBox id="ai-opponent-chb" selected="false"/>
+        <CheckBox id="ai-opponent-chb" selected="false" select=".onAIOpponentSelect"/>
+        <Label id="ai-difficulty-label" text="{i18n>gameConfigDialogAIDificultyLabel}" visible="false" />
+        <RadioButtonGroup id="ai-difficulty-group" columns="1" selectedIndex="1" visible="false" >
+          <RadioButton text="{i18n>gameConfigDialogDificulty1}" />
+          <RadioButton text="{i18n>gameConfigDialogDificulty2}" />
+          <RadioButton text="{i18n>gameConfigDialogDificulty3}" />
+        </RadioButtonGroup>
       </f:SimpleForm>
     </VBox>
     <footer>
       <OverflowToolbar >
+        <Button text="{i18n>cancelNewGameBtn}" press=".onCancelMatch" type="Transparent"/>
         <ToolbarSpacer />
         <Button text="{i18n>startNewGameBtn}" press=".onStartMatch" type="Emphasized"/>
-        <ToolbarSpacer />
       </OverflowToolbar>
     </footer>
     <beginButton>

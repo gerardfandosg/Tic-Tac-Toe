@@ -15,7 +15,9 @@ import Table from "sap/m/Table";
 import ODataListBinding from "sap/ui/model/odata/v4/ODataListBinding";
 import MessageToast from "sap/m/MessageToast";
 import ODataModel from "sap/ui/model/odata/v4/ODataModel";
-//import Context from "sap/ui/model/odata/v4/Context";
+import VBox from "sap/m/VBox";
+import Label from "sap/m/Label";
+import Router from "sap/ui/core/routing/Router";
 
 /**
  * @namespace tictactoe.tttfrontend.controller
@@ -24,7 +26,7 @@ export default class GameSession extends Controller {
 
     private _gameConfigDialog: Dialog;
     private _resourceBundle: ResourceBundle;
-    //private _aiApiUrl = "/odata/v4/MatchService/aiMove";
+    private router: Router
     private _winningCombinations = [
         [0, 1, 2],
         [3, 4, 5],
@@ -37,9 +39,9 @@ export default class GameSession extends Controller {
     ];
 
     public onInit(): void {
-        const router = UIComponent.getRouterFor(this);
+        this.router = UIComponent.getRouterFor(this);
 
-        router.getRoute("RouteGameSession")?.attachPatternMatched(this._onRouteMatched.bind(this));
+        this.router.getRoute("RouteGameSession")?.attachPatternMatched(this._onRouteMatched.bind(this));
     }
 
     private _onCreateCompleted(event: BaseEvent): void {
@@ -70,6 +72,7 @@ export default class GameSession extends Controller {
         model.setProperty("/opponentIsAI", false);
         model.setProperty("/matchInformationText", "");
         model.setProperty("/winnerText", "");
+        model.setProperty("/difficulty", 1);
 
         void this._openGameConfigDialog();
     }
@@ -89,11 +92,13 @@ export default class GameSession extends Controller {
     }
 
     private _initializeGame(): void {
-        const group = this.byId("matchTypeGroup") as RadioButtonGroup;
+        const group = this.byId("game-type-group") as RadioButtonGroup;
         const aiChb = this.byId("ai-opponent-chb") as CheckBox;
+        const aiDifficultyGroup = this.byId("ai-difficulty-group") as RadioButtonGroup;
         const model = this.getView()?.getModel() as JSONModel;
         const selectedIndex = group.getSelectedIndex();
         const matchSize = selectedIndex === 0 ? 3 : selectedIndex === 1 ? 5 : 7;
+        const difficulty = aiDifficultyGroup.getSelectedIndex();
 
         model.setProperty("/matchInProgress", true);
         model.setProperty("/gameInProgress", true);
@@ -105,6 +110,7 @@ export default class GameSession extends Controller {
         model.setProperty("/opponentIsAI", aiChb.getSelected());
         model.setProperty("/matchInformationText", this._resourceBundle.getText("matchInformationText", [matchSize]));
         model.setProperty("/winnerText", "");
+        model.setProperty("/difficulty", difficulty);
     }
 
     public onStartMatch(): void {
@@ -119,8 +125,15 @@ export default class GameSession extends Controller {
         void this._applyMove(cellIndex);
     }
 
-    private async _applyMove(cellIndex: number): Promise<void> {
+    /**
+     * AI always plays as the "O" player. 
+     * It's important to note that for this program a "game" contains multiple "matches". 
+     * That means a match is in progress until someone completes a winning or draw condition.
+     * A game is finished only when a player wins multiple matches depending on the game type selected (best of).
+     */
+    private async _applyMove(cellIndex: number, isAiMove: boolean = false): Promise<void> {
         const model = this.getView()?.getModel() as JSONModel;
+        const gameBoardBox = this.byId("game-board-box") as VBox;
         var board = model.getProperty("/board") as string[];
         var currentPlayer = model.getProperty("/currentPlayer") as string;
         var playerXWins = model.getProperty("/playerXWins") as number;
@@ -136,9 +149,14 @@ export default class GameSession extends Controller {
             return;
         }
 
+        if(opponentIsAI && currentPlayer === "O" && !isAiMove) {
+            return;
+        }
+
         board[cellIndex] = currentPlayer;
         model.setProperty("/board", board);
 
+        //Checks if winning conditions are met for the current match.
         if (this._checkWin(currentPlayer)) {
             this._setWinnerText();
             if (currentPlayer === "X") {
@@ -151,7 +169,8 @@ export default class GameSession extends Controller {
             model.setProperty("/playerOWins", playerOWins);
             model.setProperty("/matchInProgress", false);
 
-            if (this._isMatchOver()) {
+            //Checks if current game is over after current match winning conditions are met.
+            if (this._isGameOver()) {
                 StorageUtil.remove("gameStatus");
                 this._showMatchWinner();
             } else {
@@ -160,6 +179,7 @@ export default class GameSession extends Controller {
             return;
         }
 
+        //Checks if draw conditions are met.
         if (this._checkDraw()) {
             this._setDrawText();
             model.setProperty("/matchInProgress", false);
@@ -167,15 +187,31 @@ export default class GameSession extends Controller {
             return;
         }
 
+        //If no match ending conditions are met, it exchanges the current player and continues the match.
         currentPlayer = currentPlayer === "X" ? "O" : "X";
         model.setProperty("/currentPlayer", currentPlayer);
         this._storeGameStatus();
 
         if (opponentIsAI && currentPlayer === "O") {
-            const aiIndex = await this._requestAiMove();
-            if (aiIndex !== null && aiIndex !== undefined) {
-                await this._applyMove(aiIndex);
+            gameBoardBox.setBusy(true);
+            var aiIndex = await this._requestAiMove();
+
+            //AI has 5 tries to deliver a correct index.
+            for (let i = 0; i < 4; i++) {
+                if (aiIndex !== null && aiIndex !== undefined && board[aiIndex] === "") {
+                    break;
+                } else {
+                    aiIndex = await this._requestAiMove();
+                }
             }
+
+            if(aiIndex === null || aiIndex === undefined || board[aiIndex] !== "") {
+                //First available cell is selected if AI fails to provide a valid move after 5 attempts. This is a fallback mechanism to ensure the game continues.
+                aiIndex = board.findIndex(cell => cell === "");
+            }
+
+            await this._applyMove(aiIndex, true);
+            gameBoardBox.setBusy(false);
         }
     }
 
@@ -187,10 +223,10 @@ export default class GameSession extends Controller {
         const player = model.getProperty("/currentPlayer") as string;
 
         try {
-            // For unbound actions in OData v4, bind with null context
             const actionBinding = odataModel.bindContext("/MatchService.aiMove(...)", null);
             actionBinding.setParameter("board", board);
             actionBinding.setParameter("player", player);
+            actionBinding.setParameter("difficulty", model.getProperty("/difficulty") as number);
             
             await actionBinding.invoke();
 
@@ -198,7 +234,6 @@ export default class GameSession extends Controller {
                 index: number;
             };
             
-            // The result for a scalar return type (Integer) is wrapped in an object with "value" property
             if (result && typeof result === "object" && "value" in result) {
                 const index = result.value as number;
                 if (typeof index === "number" && index >= 0 && index <= 8) {
@@ -206,17 +241,17 @@ export default class GameSession extends Controller {
                 }
             }
             
-            MessageToast.show(this._resourceBundle.getText("aiMoveError") ?? "AI move failed");
+            console.error("AI move failed:");
             return null;
         } catch (err) {
-            console.error("AI action error:", err);
-            MessageToast.show(this._resourceBundle.getText("aiMoveError") ?? "AI move failed");
+            console.log("AI error:", err);
+            MessageToast.show(this._resourceBundle.getText("aiMoveError"));
             return null;
         }
     }
 
     public onStartNewMatch(): void {
-        if (this._isMatchOver()) {
+        if (this._isGameOver()) {
             void this._openGameConfigDialog();
         } else {
             this._resetBoard();
@@ -231,7 +266,7 @@ export default class GameSession extends Controller {
         model.setProperty("/matchInProgress", true);
     }
 
-    private _isMatchOver(): boolean {
+    private _isGameOver(): boolean {
         const model = this.getView()?.getModel() as JSONModel;
         const playerXWins = model.getProperty("/playerXWins") as number;
         const playerOWins = model.getProperty("/playerOWins") as number;
@@ -253,9 +288,9 @@ export default class GameSession extends Controller {
             onClose: (action) => {
                 if (action === MessageBox.Action.YES) {
                     this._storeGameResult();
-                } else {
-                    this._startNewGame();
                 }
+
+                this._navToHome();
             }
         });
     }
@@ -332,5 +367,22 @@ export default class GameSession extends Controller {
     private _startNewGame(): void {
         StorageUtil.remove("gameStatus");
         this._initModel();
+    }
+
+    public onAIOpponentSelect(event: BaseEvent): void {
+        const aiDiffLabel = this.byId("ai-difficulty-label") as Label;
+        const aiDiffGroup = this.byId("ai-difficulty-group") as RadioButtonGroup;
+        const selected = event.getParameters()["selected"] as boolean;
+        aiDiffLabel.setVisible(selected);
+        aiDiffGroup.setVisible(selected);
+    }
+
+    public onCancelMatch(): void {
+        this._gameConfigDialog?.close();
+        this._navToHome();
+    }
+
+    private _navToHome(): void {
+        this.router.navTo("RouteHome");
     }
 }

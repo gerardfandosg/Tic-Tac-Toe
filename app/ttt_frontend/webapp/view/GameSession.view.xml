@@ -30,7 +30,7 @@
         </VBox>
       </HBox>
       
-      <VBox class="gameBoard" visible="{/matchInProgress}">
+      <VBox id="game-board-box" class="gameBoard" visible="{/matchInProgress}">
         <HBox class="boardRow">
           <Button class="boardCell" text="{/board/0}" press=".onCellPress" customData:key="0" type="Transparent"/>
           <Button class="boardCell" text="{/board/1}" press=".onCellPress" customData:key="1" type="Transparent"/>

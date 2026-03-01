@@ -1,6 +1,11 @@
 <mvc:View controllerName="tictactoe.tttfrontend.controller.Home"
   xmlns:mvc="sap.ui.core.mvc"
+  xmlns:core="sap.ui.core"
   xmlns="sap.m">
-  <Page title="homepage">
+  <Page showHeader="false">
+    <VBox justifyContent="Center" alignItems="Center" class="homeContainer">
+      <Title level="H1" text="{i18n>homePageTitle}" class="gameTitle" />
+      <Text text="{i18n>homePageDescription}" class="gameSubtitle" />
+    </VBox>
   </Page>
 </mvc:View>

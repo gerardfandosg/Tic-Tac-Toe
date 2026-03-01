@@ -1,7 +1,11 @@
 :root {
-  --game-board-background-color: #333333;
-  --game-cell-background-color: white;
+  --game-board-background-color: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  --game-cell-background-color: #f8f9fa;
   --game-player-icon-color: #0064d9;
+  --player-x-color: #0064d9;
+  --player-o-color: #e63946;
+  --home-page-subtitle-color: #666666;
+  --cell-border-color: #e0e0e0;
 }
 
 .currentPlayerBox.sapMHBox {
@@ -22,29 +26,38 @@
 
 .gameBoard.sapMVBox {
   margin: 2rem;
-  padding: 10px;
-  background-color: var(--game-board-background-color);
-  border-radius: 4px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 16px;
+  background: var(--game-board-background-color);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .boardRow.sapMHBox {
-  margin: 5px;
+  margin: 8px;
+  gap: 8px;
 }
 
 .boardCell.sapMBtn {
   height: 160px !important;
   width: 160px !important;
-  margin: 5px;
-  background-color: var(--game-cell-background-color);
+  margin: 0 !important;
+  background-color: var(--game-cell-background-color) !important;
+  border: 2px solid var(--cell-border-color);
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .boardCell.sapMBtn:hover {
-  background-color: var(--game-cell-background-color);
+  background-color: var(--game-cell-background-color) !important;
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  border-color: var(--game-player-icon-color);
 }
 
 .boardCell.sapMBtnPressed {
-  background-color: var(--game-cell-background-color);
+  background-color: var(--game-cell-background-color) !important;
+  transform: translateY(0);
 }
 
 .boardCell.sapMBtn:hover > .sapMBtnHoverable {
@@ -52,13 +65,30 @@
   border: none;
 }
 
+.boardCell[data-ui5-accesskey="x"] .sapMBtnInner {
+  color: var(--player-x-color) !important;
+}
+
+.boardCell[data-ui5-accesskey="o"] .sapMBtnInner {
+  color: var(--player-o-color) !important;
+}
+
+.boardCell.sapMBtn:hover[data-ui5-accesskey="x"] .sapMBtnInner {
+  color: var(--player-x-color) !important;
+}
+
+.boardCell.sapMBtn:hover[data-ui5-accesskey="o"] .sapMBtnInner {
+  color: var(--player-o-color) !important;
+}
+
 .boardCell .sapMBtnInner {
   font-size: 6rem !important;
   font-weight: bold !important;
   height: 100%;
-  display: block;
-  margin: auto;
-  align-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s ease;
 }
 
 .boardCell.sapMBtn .sapMBtnContent {
@@ -98,10 +128,30 @@
   font-size: 1rem;
   font-weight: bold;
   color: #666;
+}
+
+.homeContainer.sapMVBox {
+  height: 100%;
+  padding: 3rem;
+}
+
+.gameTitle.sapMTitle {
+  font-size: 5rem;
+  font-weight: bold;
+  color: var(--game-player-icon-color);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  margin-bottom: 1rem;
+  letter-spacing: 2px;
+}
+
+.gameSubtitle.sapMText {
+  font-size: 1.5rem;
+  color: var(--home-page-subtitle-color);
+  font-style: italic;
   margin-bottom: 0.3rem;
 }
 
 .matchInfoText.sapMText {
   font-size: 0.9rem;
-  color: #333;
+  color: var(--home-page-subtitle-color);
 }

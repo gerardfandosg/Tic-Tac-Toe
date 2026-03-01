@@ -1,10 +1,11 @@
 const cds = require('@sap/cds');
 const fetch = global.fetch || require('node-fetch');
+var lastSelectedIndex = -1;
 
 module.exports = cds.service.impl(async function () {
 
   this.on('aiMove', async (req) => {
-    const { board, player } = req.data;
+    const { board, player, difficulty } = req.data;
 
     if (!['X','O'].includes(player)) {
       req.error(400, "player must be 'X' or 'O'");
@@ -15,7 +16,28 @@ module.exports = cds.service.impl(async function () {
       req.error(500, 'OpenAI key not configured');
     }
 
-    const systemPrompt = `You are a Tic-Tac-Toe engine. The board is an array of 9 elements, index 0..8. Each element representing a cell on the board.Empty strings are empty cells. "O" strings are occupied by player O. "X" strings are occupied by player X. Current board status is ${board}. Return a single integer between 0-8, which is the best move for player ${player}. You can not select an already occupied cell. The answer must be a single integer of 1 digit representing the position on the board. Nothing else.`;
+    var systemPrompt = `You are a Tic-Tac-Toe game engine. The board is an array of 9 elements, index 0..8.
+      The winning conditions are three characters of the same type in a row horizontally, vertically or diagonally.
+      In our board representation, the cells combinations for those winning conditions are are: [0,1,2], [3,4,5], [6,7,8] for horizontal, [0,3,6], [1,4,7], [2,5,8] for vertical and [0,4,8], [2,4,6] for diagonal.
+      Each element of our array represents a cell on the board. Empty strings are empty cells. "O" strings are occupied by player O. 
+      "X" strings are occupied by player X. Current board situation is ${board}. 
+      Return a single integer between 0-8, which is the best move for player ${player}. You can not choose an already occupied index. 
+      The answer must be a single integer of 1 digit representing the position on the board (the index of the array). Nothing else. You can't choose the following index: ${lastSelectedIndex}`;
+
+    console.log("Board situation:", board);
+
+    switch(difficulty) {
+      case 0: // easy
+        systemPrompt += "Make a random move instead of the best move.";
+        break;
+      case 1: // medium
+        break;
+      case 2: // hard
+        systemPrompt += ` Always select the best move available. `;
+        break;
+      default:
+        req.error(400, `Invalid difficulty: ${difficulty}`);
+    }
 
     const body = {
       model: 'gpt-4o-mini',
@@ -45,17 +67,21 @@ module.exports = cds.service.impl(async function () {
       const data = await response.json();
       const content = data?.choices?.[0]?.message?.content || '';
       const match = content.match(/(\d+)/);
+
       if (!match) throw new Error(`unexpected response '${content}'`);
+
       const idx = parseInt(match[1], 10);
+
       if (isNaN(idx) || idx < 0 || idx > 8) {
         throw new Error(`invalid index ${idx}`);
       }
 
       console.log('OpenAI response:', idx);
+      lastSelectedIndex = idx;
 
       return idx;
     } catch (e) {
-      req.error(502, `AI service error: ${e.message}`);
+      req.error(500, `AI service error: ${e.message}`);
     }
   });
 
